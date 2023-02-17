@@ -1,0 +1,22 @@
+
+<h1>Category</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ Category.id }}</td>
+            </tr>
+            <tr>
+                <th>titre</th>
+                <td>{{ Category.titre }}</td>
+            </tr>
+         
+
+
+        </tbody>
+    </table>
+
+        <a href="{{ path('update1', {'id':Category.id}) }}">modifier</a>
+
+     <a href="{{ path('remove1', {'id':Category.id}) }}">supprimer</a>
