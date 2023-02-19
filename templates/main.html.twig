@@ -84,66 +84,110 @@
     </section><!-- End Features Section -->
 
     <!-- ======= Services Section ======= -->
-    <section id="services" class="services">
-      <div class="container" data-aos="fade-up">
 
-        <div class="section-title">
-          <h2>Services</h2>
-          <p>Check our Services</p>
-        </div>
+   
+<!-- templates/frontend/index.html.twig -->
 
-        <div class="row">
-          <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
-            <div class="icon-box">
-              <div class="icon"><i class="bx bxl-dribbble"></i></div>
-              <h4><a href="">Lorem Ipsum</a></h4>
-              <p>Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi</p>
-            </div>
-          </div>
+<section id="services" class="formation">
+  <div class="container" data-aos="fade-up">
 
-          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="200">
-            <div class="icon-box">
-              <div class="icon"><i class="bx bx-file"></i></div>
-              <h4><a href="">Sed ut perspiciatis</a></h4>
-              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</p>
-            </div>
-          </div>
+    <div class="section-title">
+      <h2>Formation</h2>
+      <p>Check our formation</p>
+    </div>
 
-          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0" data-aos="zoom-in" data-aos-delay="300">
-            <div class="icon-box">
-              <div class="icon"><i class="bx bx-tachometer"></i></div>
-              <h4><a href="">Magni Dolores</a></h4>
-              <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia</p>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="100">
-            <div class="icon-box">
-              <div class="icon"><i class="bx bx-world"></i></div>
-              <h4><a href="">Nemo Enim</a></h4>
-              <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis</p>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
-            <div class="icon-box">
-              <div class="icon"><i class="bx bx-slideshow"></i></div>
-              <h4><a href="">Dele cardo</a></h4>
-              <p>Quis consequatur saepe eligendi voluptatem consequatur dolor consequuntur</p>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="300">
-            <div class="icon-box">
-              <div class="icon"><i class="bx bx-arch"></i></div>
-              <h4><a href="">Divera don</a></h4>
-              <p>Modi nostrum vel laborum. Porro fugit error sit minus sapiente sit aspernatur</p>
-            </div>
-          </div>
-
-        </div>
-
+    {% for formation in formations %}
+    <div class="formation">
+    {% if formation.photo %}
+      <img src="{{ asset('uploads/photos/' ~ formation.photo) }}" alt="{{ formation.photo}}">
+    {% else %}
+      <p>No photo available.</p>
+    {% endif %}
+      <div class="formation-info">
+        <h3>Name:    {{ formation.nom }}</h3>
+        <h3>Cat:  {{ formation.category.titre }}</h3>
+        <p>Desc:      {{ formation.description }}</p>
+        <p>Prix:      {{ formation.prix }}</p>
+    
       </div>
+    </div>
+    {% endfor %}
+
+  </div>
+</section>
+
+<style>
+  .formation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.formation:hover {
+  transform: scale(1.01);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+}
+
+.formation img {
+  width: 300px;
+  height: 200px;
+  object-fit: cover;
+}
+
+.formation-info {
+  padding: 20px;
+}
+
+.formation-info h3 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.formation-info p {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #666;
+}
+
+.btn-container {
+  display: flex;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
+  text-decoration: none;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn-primary {
+  background-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0069d9;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+</style>
+
+        
     </section><!-- End Services Section -->
 
     <!-- ======= Cta Section ======= -->
