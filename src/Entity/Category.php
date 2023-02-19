@@ -19,20 +19,18 @@ class Category
     private ?string $titre = null;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Formation::class)]
-    private Collection $description;
+    private Collection $formation;
 
     public function __construct()
     {
-        $this->description = new ArrayCollection();
+        $this->formation = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
     }
-    public function __toString() {
-        return $this->id;
-    }
+
     public function getTitre(): ?string
     {
         return $this->titre;
@@ -48,27 +46,27 @@ class Category
     /**
      * @return Collection<int, Formation>
      */
-    public function getDescription(): Collection
+    public function getFormation(): Collection
     {
-        return $this->description;
+        return $this->formation;
     }
 
-    public function addDescription(Formation $description): self
+    public function addFormation(Formation $formation): self
     {
-        if (!$this->description->contains($description)) {
-            $this->description->add($description);
-            $description->setCategory($this);
+        if (!$this->formation->contains($formation)) {
+            $this->formation->add($formation);
+            $formation->setCategory($this);
         }
 
         return $this;
     }
 
-    public function removeDescription(Formation $description): self
+    public function removeFormation(Formation $formation): self
     {
-        if ($this->description->removeElement($description)) {
+        if ($this->formation->removeElement($formation)) {
             // set the owning side to null (unless already changed)
-            if ($description->getCategory() === $this) {
-                $description->setCategory(null);
+            if ($formation->getCategory() === $this) {
+                $formation->setCategory(null);
             }
         }
 
