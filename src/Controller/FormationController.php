@@ -25,20 +25,23 @@ class FormationController extends AbstractController
             'formations' => $formations,
         ]);
     }
-
+ 
     #[Route('/addFormation', name: 'addFormation')]
     public function addFormation(Request $request, ManagerRegistry $doctrine): Response
     {
         $formation = new Formation();
         $form = $this->createForm(FormationType::class, $formation);
         $form->handleRequest($request);
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $em=$doctrine->getManager();
             $em->persist($formation);
             $em->flush();
+            
+            
              return $this->redirectToRoute('index');
         }
-
+       
         return $this->render('formation/new.html.twig', [
              'form' => $form->createView(),
         ]);
@@ -51,8 +54,18 @@ class FormationController extends AbstractController
             'Formation' => $result,
         ]);
     }
-
-    
+ 
+ /**
+     * @Route("/", name="homepage")
+     */
+    public function index(FormationRepository $formationRepository): Response
+    {
+        $formations = $formationRepository->findAll();
+        
+        return $this->render('base.html.twig', [
+            'formations' => $formations,
+        ]);
+    }
     #[Route('/updateformation/{id}', name: 'update')]
     public function updateformation(Request $request, ManagerRegistry $doctrine,formation $formation, formationRepository $formationRepository): Response
     {
@@ -81,4 +94,15 @@ class FormationController extends AbstractController
 
         return $this->redirectToRoute('index');
     }
+    /**
+ * @Route("stats", name="stats")
+ */
+public function formationsStats(FormationRepository $formationRepository): Response
+{
+    $formationsCountByCategory = $formationRepository->getFormationsCountByCategory();
+
+    return $this->render('formation/stats.html.twig', [
+        'formationsCountByCategory' => $formationsCountByCategory,
+    ]);
+}
 }
