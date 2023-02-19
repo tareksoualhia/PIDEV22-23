@@ -63,4 +63,13 @@ class FormationRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+public function getFormationsCountByCategory()
+{
+    $qb = $this->createQueryBuilder('f')
+        ->select('c.titre as category', 'count(f.id) as count')
+        ->leftJoin('f.category', 'c')
+        ->groupBy('c.id');
+
+    return $qb->getQuery()->getResult();
+}
 }
