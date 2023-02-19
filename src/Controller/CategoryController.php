@@ -1,18 +1,17 @@
 <?php
 
 namespace App\Controller;
-
+use App\Entity\Category;
+use App\Form\CategoryType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Category;
-use App\Form\CategoryType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use App\Repository\CategoryRepository;
 use Doctrine\Persistence\ManagerRegistry;
-
+use App\Repository\FormationRepository;
 
 class CategoryController extends AbstractController
 {
@@ -53,31 +52,42 @@ class CategoryController extends AbstractController
 
     
     #[Route('/updateCategory/{id}', name: 'update1')]
-    public function updateCategory(Request $request, ManagerRegistry $doctrine,Category $Category, CategoryRepository $CategoryRepository): Response
-    {
-        $form = $this->createForm(CategoryType::class, $Category);
-        $form->handleRequest($request);
+public function updateCategory(Request $request, ManagerRegistry $doctrine, $id): Response
+{
+    $em = $doctrine->getManager();
+    $category = $em->getRepository(Category::class)->find($id);
 
-        if ($form->isSubmitted()&& $form->isValid()) {
-            $em=$doctrine->getManager();
-            $em->persist($Category);
-            $em->flush();
-             return $this->redirectToRoute('index1');
-        }
+    $form = $this->createForm(CategoryType::class, $category);
+    $form->handleRequest($request);
 
-        return $this->render('Category/edit1.html.twig', [
-            'Category' => $Category,
-            'form' => $form->createView(),
-        ]);
-    }
-    #[Route('/removeCategory/{id}', name: 'remove1')]
-    public function deleteCategory(ManagerRegistry $doctrine, CategoryRepository $repo,$id): Response
-    {
-        $em=$doctrine->getManager();
-        $result=$repo->find($id);
-        $em->remove($result);
-        $em->flush(); 
-
+    if ($form->isSubmitted() && $form->isValid()) {
+        $em->flush();
         return $this->redirectToRoute('index1');
     }
+
+    return $this->render('Category/edit1.html.twig', [
+        'Category' => $category,
+        'form' => $form->createView(),
+    ]);
 }
+
+    #[Route('/removeCategory/{id}', name: 'remove1')]
+public function deleteCategory(ManagerRegistry $doctrine, CategoryRepository $categoryRepo, FormationRepository $formationRepo, $id): Response
+{
+    $em = $doctrine->getManager();
+    $category = $categoryRepo->find($id);
+
+    // Get all formations related to the category
+    $formations = $formationRepo->findBy(['category' => $category]);
+
+    // Remove each formation
+    foreach ($formations as $formation) {
+        $em->remove($formation);
+    }
+
+    // Remove the category
+    $em->remove($category);
+    $em->flush();
+
+    return $this->redirectToRoute('index1');
+}}
