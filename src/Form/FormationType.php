@@ -1,42 +1,75 @@
 <?php
 
-namespace App\Form;
+namespace App\Repository;
 
 use App\Entity\Formation;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use App\Entity\Category;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
-class FormationType extends AbstractType
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
+
+/**
+ * @extends ServiceEntityRepository<Formation>
+ *
+ * @method Formation|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Formation|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Formation[]    findAll()
+ * @method Formation[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ */
+class FormationRepository extends ServiceEntityRepository
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function __construct(ManagerRegistry $registry)
     {
-        $builder
-            ->add('nom')
-            ->add('description')
-            ->add('photo')
-            ->add('meet')
-            ->add('prix')
-            ->add('category', EntityType::class, [
-                'class' => Category::class,
-                'choice_label' => 'titre',
-                'label' => 'Category'
-            ])
-            ->add('save',SubmitType::class)
-
-        ;
+        parent::__construct($registry, Formation::class);
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function save(Formation $entity, bool $flush = false): void
     {
-        $resolver->setDefaults([
-            'data_class' => Formation::class,
-        ]);
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
     }
+
+    public function remove(Formation $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+//    /**
+//     * @return Formation[] Returns an array of Formation objects
+//     */
+//    public function findByExampleField($value): array
+//    {
+//        return $this->createQueryBuilder('f')
+//            ->andWhere('f.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->orderBy('f.id', 'ASC')
+//            ->setMaxResults(10)
+//            ->getQuery()
+//            ->getResult()
+//        ;
+//    }
+
+//    public function findOneBySomeField($value): ?Formation
+//    {
+//        return $this->createQueryBuilder('f')
+//            ->andWhere('f.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->getQuery()
+//            ->getOneOrNullResult()
+//        ;
+//    }
+public function getFormationsCountByCategory()
+{
+    $qb = $this->createQueryBuilder('f')
+        ->select('c.titre as category', 'count(f.id) as count')
+        ->leftJoin('f.category', 'c')
+        ->groupBy('c.id');
+
+    return $qb->getQuery()->getResult();
 }
-
-
-
+}
