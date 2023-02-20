@@ -2,29 +2,32 @@
 
 namespace App\Form;
 
-use App\Entity\Reservation;
+use App\Entity\Joueur;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ReservationType extends AbstractType
+class JoueurType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('sujet')
-            ->add('dat')
-            ->add('heure')
+            ->add('nom')
+            ->add('prenom')
+            ->add('dateNaissance')
+            ->add('email')
+            ->add('motdepasse')
+            ->add('telephone')
+            ->add('rolePrefere')
             ->add('abonnement')
-            ->add('joueur')
-            ->add('entraineur')
+            ->add('equipe')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Reservation::class,
+            'data_class' => Joueur::class,
         ]);
     }
 }

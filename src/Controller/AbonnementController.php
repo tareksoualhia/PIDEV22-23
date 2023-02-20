@@ -24,26 +24,28 @@ class AbonnementController extends AbstractController
             'abonnements' => $abonnements,
         ]);
     }
+    
 
     #[Route('/new', name: 'app_abonnement_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $abonnement = new Abonnement();
-        $form = $this->createForm(AbonnementType::class, $abonnement);
-        $form->handleRequest($request);
+    public function new(Request $request): Response
+{
+    $abonnement = new Abonnement();
+    $form = $this->createForm(AbonnementType::class, $abonnement);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($abonnement);
-            $entityManager->flush();
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($abonnement);
+        $entityManager->flush();
 
-            return $this->redirectToRoute('app_abonnement_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('abonnement/new.html.twig', [
-            'abonnement' => $abonnement,
-            'form' => $form,
-        ]);
+        return $this->redirectToRoute('app_abonnement_index');
     }
+
+    return $this->render('abonnement/new.html.twig', [
+        'abonnement' => $abonnement,
+        'form' => $form->createView(),
+    ]);
+}
 
     #[Route('/{id}', name: 'app_abonnement_show', methods: ['GET'])]
     public function show(Abonnement $abonnement): Response

@@ -2,6 +2,7 @@
 
 
 namespace App\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,5 +32,31 @@ class Entraineur
      */
     private $ld;
 
+    public function getHoraireDisponibilite(): ?string
+    {
+        return $this->horaireDisponibilite;
+    }
 
+    public function setHoraireDisponibilite(?string $horaireDisponibilite): self
+    {
+        $this->horaireDisponibilite = $horaireDisponibilite;
+
+        return $this;
+    }
+
+    public function getLd(): ?Joueur
+    {
+        return $this->ld;
+    }
+
+    public function setLd(Joueur $ld): self
+    {
+        $this->ld = $ld;
+
+        return $this;
+    }
+    public function __toString(): string
+{
+    return $this->ld;
+}
 }
