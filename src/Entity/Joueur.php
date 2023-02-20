@@ -89,6 +89,134 @@ class Joueur
      * })
      */
     private $equipe;
+     /**
+     * Get the value of id
+     *
+     * @return  int
+     */ 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Get the value of nom
+     *
+     * @return  string
+     */ 
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
+    /**
+     * Set the value of nom
+     *
+     * @param  string  $nom
+     *
+     * @return  self
+     */ 
+    public function setNom(string $nom)
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    public function getPrenom(): ?string
+    {
+        return $this->prenom;
+    }
+
+    public function setPrenom(string $prenom): self
+    {
+        $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    public function getDateNaissance(): ?\DateTimeInterface
+    {
+        return $this->dateNaissance;
+    }
+
+    public function setDateNaissance(?\DateTimeInterface $dateNaissance): self
+    {
+        $this->dateNaissance = $dateNaissance;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+    public function getMotdepasse(): ?string
+{
+    return $this->motdepasse;
+}
+
+public function setMotdepasse(string $motdepasse): self
+{
+    $this->motdepasse = $motdepasse;
+    return $this;
+}
+
+public function getTelephone(): ?string
+{
+    return $this->telephone;
+}
+
+public function setTelephone(?string $telephone): self
+{
+    $this->telephone = $telephone;
+    return $this;
+}
+
+public function getRolePrefere(): ?string
+{
+    return $this->rolePrefere;
+}
+
+public function setRolePrefere(?string $rolePrefere): self
+{
+    $this->rolePrefere = $rolePrefere;
+    return $this;
+}
+public function getAbonnement(): ?Abonnement
+{
+    return $this->abonnement;
+}
+
+public function setAbonnement(?Abonnement $abonnement): self
+{
+    $this->abonnement = $abonnement;
+
+    return $this;
+}
+
+public function getEquipe(): ?Equipe
+{
+    return $this->equipe;
+}
+
+public function setEquipe(?Equipe $equipe): self
+{
+    $this->equipe = $equipe;
+
+    return $this;
+}
+public function __toString(): string
+{
+    return $this->id;
+}
 
 
 }
