@@ -58,7 +58,6 @@ class Abonnement
      * @var string
      *
      * @ORM\Column(name="niveau_access", type="string", length=255, nullable=false)
-     * @Assert\Choice(choices={"intermediate","beginner", "	advanced"})
      */
     private $niveauAccess;
 

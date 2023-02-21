@@ -41,7 +41,7 @@ class AbonnementController extends AbstractController
         return $this->redirectToRoute('app_abonnement_index');
     }
 
-    return $this->render('abonnement/new.html.twig', [
+    return $this->render('abonnement/front.html.twig', [
         'abonnement' => $abonnement,
         'form' => $form->createView(),
     ]);
