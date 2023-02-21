@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Entraineur index{% endblock %}
+
+{% block body %}
+    <h1>Entraineur index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>HoraireDisponibilite</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entraineur in entraineurs %}
+            <tr>
+                <td>{{ entraineur.horaireDisponibilite }}</td>
+                <td>
+                    <a href="{{ path('app_entraineur_show', {'ld': entraineur.ld}) }}">show</a>
+                    <a href="{{ path('app_entraineur_edit', {'ld': entraineur.ld}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_entraineur_new') }}">Create new</a>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Reservation{% endblock %}
+
+{% block main %}
+<div style="text-align: center; margin: 80px; padding: 50px">
+<H1>meci d'avoir fait un abonnement</h1>
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="get-started-btn scrollto" style="margin-bottom:20px;">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}
+
+    <a href="{{ path('app_reservation_index') }}">back to list</a>
+</div>
+{% endblock %}
