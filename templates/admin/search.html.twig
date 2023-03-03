@@ -1,0 +1,48 @@
+<table class="table">
+    <tbody>
+        <div class="container mt-5">
+            {{ form_start(form, {'attr': {'class': 'form-inline', 'id': 'search-form'}}) }}
+            {{ form_row(form.search, {'attr': {'class': 'form-control mr-sm-2', 'placeholder': 'Search'}}) }}
+           
+           
+            {{ form_row(form.submit, {'attr': {'class': 'btn btn-primary my-2 my-sm-0'}}) }}
+            {{ form_end(form) }}
+        </div>
+    </tbody>
+</table>
+
+
+<div id="search-results"></div>
+
+<script>
+    $(function () {
+        $('#search-form').submit(function (event) {
+            event.preventDefault();
+
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url: '{{ path('search') }}',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    var results = JSON.parse(response);
+                    var html = '';
+
+                    results.forEach(function (result) {
+                        html += '<div class="card">' +
+                            '<div class="card-body">' +
+                            '<h5 class="card-title">' + result.nom + '</h5>' +
+                            '<p class="card-text">' + result.description + '</p>' +
+                            '<p class="card-text">' + result.meet + '</p>' +
+                            '<p class="card-text">' + result.photo + '</p>' +
+                            '<p class="card-text">' + result.prix + '</p>' +
+                            '</div>' +
+                            '</div>';
+                    });
+
+                    $('#search-results').html(html);
+                }
+            });
+        });
+    });
