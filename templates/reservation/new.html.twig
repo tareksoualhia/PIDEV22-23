@@ -5,11 +5,12 @@
 {% block main %}
 <div style="text-align: center; margin: 80px; padding: 50px">
 <H1>meci d'avoir fait un abonnement</h1>
+<H1>vous pouver maintenant faire des reservations</h1>
+<H4>Nouvelle reservation:</h4>
 {{ form_start(form) }}
     {{ form_widget(form) }}
     <button class="get-started-btn scrollto" style="margin-bottom:20px;">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
 
-    <a href="{{ path('app_reservation_index') }}">back to list</a>
 </div>
 {% endblock %}

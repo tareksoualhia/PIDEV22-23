@@ -310,6 +310,7 @@
                 <td>
                     <a href="{{ path('app_abonnement_show', {'id': abonnement.id}) }}">show</a>
                     <a href="{{ path('app_abonnement_edit', {'id': abonnement.id}) }}">edit</a>
+                    
                 </td>
             </tr>
         {% else %}
@@ -321,6 +322,7 @@
     </table>
 
     <a href="{{ path('app_abonnement_new') }}">Create new</a>
+    <a href="{{ path('app_decrease_duration') }}" class="btn btn-primary">Decrease Duration</a>
                   </div>
                 </div>
               </div>
