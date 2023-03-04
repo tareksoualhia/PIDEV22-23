@@ -1,0 +1,38 @@
+{{ form_start(form, {'attr': {'class': 'form-inline', 'id': 'search-form'}}) }}
+    {{ form_widget(form) }}
+{{ form_end(form) }}
+<div id="search-results"></div>
+
+<script>
+    $(function () {
+        $('#search-form').submit(function (event) {
+            event.preventDefault();
+
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url: '{{ path('search') }}',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    var results = JSON.parse(response);
+                    var html = '';
+
+                    results.forEach(function (result) {
+                        html += '<div class="card">' +
+                            '<div class="card-body">' +
+                            '<h5 class="card-title">' + result.nom + '</h5>' +
+                            '<p class="card-text">' + result.description + '</p>' +
+                            '<p class="card-text">' + result.meet + '</p>' +
+                            '<p class="card-text">' + result.photo + '</p>' +
+                            '<p class="card-text">' + result.prix + '</p>' +
+                            '</div>' +
+                            '</div>';
+                    });
+
+                    $('#search-results').html(html);
+                }
+            });
+        });
+    });
+</script>
