@@ -41,6 +41,6 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
         'reservation' => $reservation,
         'form' => $form,
     ]);
-}
-    
+}   
+
 }
