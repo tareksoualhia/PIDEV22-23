@@ -1,53 +1,68 @@
 <?php
 
-
 namespace App\Entity;
+
+use App\Repository\SponsorRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Sponsor
- *
- * @ORM\Table(name="sponsor")
- * @ORM\Entity
- */
+#[ORM\Entity(repositoryClass: SponsorRepository::class)]
 class Sponsor
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="nom", type="string", length=255, nullable=false)
-     */
-    private $nom;
+   
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="budget", type="decimal", precision=10, scale=2, nullable=false)
-     */
-    private $budget;
+    #[ORM\Column(length: 255)]
+    private ?string $nom = null;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Evenement", mappedBy="sponsor")
-     */
-    private $evenement = array();
+    #[ORM\Column]
+    private ?float $budget = null;
 
-    /**
-     * Constructor
-     */
-    public function __construct()
+    #[ORM\ManyToOne(inversedBy: 'sponsors')]
+    private ?Evenment $evenment = null;
+
+    public function getId(): ?int
     {
-        $this->evenement = new \Doctrine\Common\Collections\ArrayCollection();
+        return $this->id;
     }
 
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): self
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+    
+
+    public function getBudget(): ?float
+    {
+        return $this->budget;
+    }
+
+    public function setBudget(float $budget): self
+    {
+        $this->budget = $budget;
+
+        return $this;
+    }
+
+    public function getEvenment(): ?Evenment
+    {
+        return $this->evenment;
+    }
+
+    public function setEvenment(?Evenment $evenment): self
+    {
+        $this->evenment = $evenment;
+
+        return $this;
+    }
 }

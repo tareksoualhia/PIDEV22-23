@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+{% block title %}Event{% endblock %}
+{% block body %}
+<div class="card-body">
+                    <h4 class="card-title">Consulter Evenement</h4>
+                    </p>
+                    <table class="table">
+                     <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ evenment.id }}</td>
+            </tr>
+            <tr>
+                <th>Descr</th>
+                <td>{{ evenment.descr }}</td>
+            </tr>
+            <tr>
+                <th>Date_debut</th>
+                <td>{{ evenment.dateDebut ? evenment.dateDebut|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Date_fin</th>
+                <td>{{ evenment.dateFin ? evenment.dateFin|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ evenment.title }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="{{ path('app_evenment_index') }}">back to list</a>
+    <a href="{{ path('app_evenment_edit', {'id': evenment.id}) }}">edit</a>
+    {{ include('evenment/_delete_form.html.twig') }}
+                      </tbody>
+                    </table>
+                  </div>
+{% endblock %}
