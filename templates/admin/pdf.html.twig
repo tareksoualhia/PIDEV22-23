@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Liste Formation</title>
+	<style>
+		/* header styles */
+		header {
+			background-color: #F9A825;
+			padding: 10px;
+			text-align: center;
+		}
+		header h1 {
+			color: #FFFFFF;
+			font-size: 28px;
+			margin: 0;
+		}
+
+		/* body styles */
+		body {
+			background-color: #F0F0F0;
+			font-family: Arial, sans-serif;
+			font-size: 16px;
+			line-height: 1.5;
+			margin: 0;
+			padding: 0;
+		}
+		.align-center {
+			text-align: center;
+		}
+
+		/* table styles */
+		table {
+			background-color: #FFFFFF;
+			border-collapse: collapse;
+			margin: 20px auto;
+			width: 100%;
+		}
+		th, td {
+			border: 1px solid #CCCCCC;
+			padding: 10px;
+			text-align: left;
+		}
+		th {
+			background-color: #F9A825;
+			color: #FFFFFF;
+			font-weight: normal;
+		}
+
+		/* message styles */
+		.message {
+			background-color: #FFFFFF;
+			border: 1px solid #CCCCCC;
+			margin: 20px auto;
+			padding: 10px;
+			text-align: center;
+			width: 50%;
+		}
+		.message.success {
+			background-color: #D4EDDA;
+			border-color: #C3E6CB;
+			color: #155724;
+		}
+		.message.error {
+			background-color: #F8D7DA;
+			border-color: #F5C6CB;
+			color: #721C24;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<h1>Liste Formation</h1>
+	</header>
+
+	<main>
+		<section class="align-center">
+			<h1>Bienvenue dans votre application CHALLENGERS</h1>
+			<p>Voici la liste de toutes les formations:</p>
+		</section>
+
+		<section>
+			<table>
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Catégorie</th>
+						<th>Nom</th>
+						<th>Description</th>
+						<th>Photo</th>
+						<th>Meet</th>
+						<th>Prix</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for Formation in Formations %}
+						<tr>
+							<td>{{ Formation.id }}</td>
+							<td>{{ Formation.category is not null ? Formation.category.titre : '' }}</td>
+							<td>{{ Formation.nom }}</td>
+							<td>{{ Formation.description }}</td>
+							<td>{{ Formation.photo }}</td>
+							<td>{{ Formation.meet }}</td>
+							<td>{{ Formation.prix }}</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="7">Aucun enregistrement trouvé</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</section>
+
+		
