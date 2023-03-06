@@ -12,6 +12,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use App\Repository\CategoryRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Repository\FormationRepository;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class CategoryController extends AbstractController
 {
@@ -90,4 +93,68 @@ public function deleteCategory(ManagerRegistry $doctrine, CategoryRepository $ca
     $em->flush();
 
     return $this->redirectToRoute('index1');
-}}
+}
+#[Route("/AllCategories", name: "list1")]
+    //* Dans cette fonction, nous utilisons les services NormlizeInterface et CategoryRepository, 
+    //* avec la méthode d'injection de dépendances.
+    public function getCategorys(CategoryRepository $repo, SerializerInterface $serializer)
+    {
+        $Categorys = $repo->findAll();
+        //* Nous utilisons la fonction normalize qui transforme le tableau d'objets 
+        //* Categorys en  tableau associatif simple.
+        // $CategorysNormalises = $normalizer->normalize($Categorys, 'json', ['groups' => "Categorys"]);
+
+        // //* Nous utilisons la fonction json_encode pour transformer un tableau associatif en format JSON
+        // $json = json_encode($CategorysNormalises);
+
+        $json = $serializer->serialize($Categorys, 'json', ['groups' => "Categorys"]);
+
+        //* Nous renvoyons une réponse Http qui prend en paramètre un tableau en format JSON
+        return new Response($json);
+    }
+
+    
+    
+    
+    #[Route("addCategoryJSON/new", name: "addCategoryJSON")]
+    public function addCategoryJSON(Request $req,   NormalizerInterface $Normalizer)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $Category = new Category();
+        $Category->setTitre($req->get('titre'));
+        
+        $em->persist($Category);
+        $em->flush();
+
+        $jsonContent = $Normalizer->normalize($Category, 'json', ['groups' => 'Categorys']);
+        return new Response(json_encode($jsonContent));
+    }
+    #[Route("updateCategoryJSON/{id}", name: "updateCategoryJSON")]
+    public function updateCategoryJSON(Request $req, $id, NormalizerInterface $Normalizer)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $Category = $em->getRepository(Category::class)->find($id);
+        $Category->setTitre($req->get('titre'));
+        
+       
+        $em->flush();
+
+        $jsonContent = $Normalizer->normalize($Category, 'json', ['groups' => 'Categorys']);
+        return new Response("Category updated successfully " . json_encode($jsonContent));
+    }
+
+    #[Route("deleteCategoryJSON/{id}", name: "deleteCategoryJSON")]
+    public function deleteCategoryJSON(Request $req, $id, NormalizerInterface $Normalizer)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $Category = $em->getRepository(Category::class)->find($id);
+        $em->remove($Category);
+        $em->flush();
+        $jsonContent = $Normalizer->normalize($Category, 'json', ['groups' => 'Categorys']);
+        return new Response("Category deleted successfully " . json_encode($jsonContent));
+    
+    }
+}
