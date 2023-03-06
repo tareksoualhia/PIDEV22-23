@@ -1,0 +1,125 @@
+/ **************************************Begin affiche*******************************************************
+    #[Route('/afficheProduit', name: 'afficheProduit')]
+    public function afficheProduit(ProduitRepository $productRepository,CategorieProduitRepository $categorieProduitRepository): Response
+    {
+        $products = $productRepository->findAll();
+        
+        $categories=$productRepository->findTop5CategoriesWithProducts();
+        
+        return $this->render('produit/afficheProduits.html.twig', [
+            'products' => $products,'categories'=>$categories,
+        ]);
+    }
+
+    #[Route('/afficheProduit/SortedByNameAsc', name: 'afficheProduitSortedByNameAsc')]
+    public function afficheProduitSortedByNameAsc(ProduitRepository $productRepository): Response
+    {
+
+        
+        $products = $productRepository->findAllSortedByNameAsc();
+      
+        $categories=$productRepository->findTop5CategoriesWithProducts();
+        
+        return $this->render('produit/afficheProduits.html.twig', [
+            'products' => $products,'categories'=>$categories,
+        ]);
+    }
+
+
+    #[Route('/afficheProduit/SortedByPriceAsc', name: 'afficheProduitSortedByPriceAsc')]
+    public function afficheProduitSortedByPriceAsc(ProduitRepository $productRepository): Response
+    {
+
+        $products = $productRepository->findAllSortedByPriceAsc();
+        
+        $categories=$productRepository->findTop5CategoriesWithProducts();
+        
+        return $this->render('produit/afficheProduits.html.twig', [
+            'products' => $products,'categories'=>$categories,
+        ]);
+    }
+
+
+    #[Route('/afficheProduit/SortedByPriceDesc', name: 'afficheProduitSortedByPriceDesc')]
+    public function afficheProduitSortedByPriceDesc(ProduitRepository $productRepository): Response
+    {
+
+        $products = $productRepository->findAllSortedByPriceDesc();
+        
+        $categories=$productRepository->findTop5CategoriesWithProducts();
+        
+        return $this->render('produit/afficheProduits.html.twig', [
+            'products' => $products,'categories'=>$categories,
+        ]);
+    }
+
+
+
+
+    #[Route('/afficheProduit/{category_id}', name: 'afficheProduitParCategory')]
+    public function afficheProduitParCategory($category_id,ProduitRepository $productRepository): Response
+    {   
+        $products = $productRepository->findProduitsByCategorie($category_id);
+        
+        $categories = $productRepository->findTop5CategoriesWithProducts();
+        
+        return $this->render('produit/afficheProduits.html.twig', [
+            'products' => $products,
+            'categories' => $categories,
+        ]);
+    }
+
+public function findAllSortedByNameAsc()
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllSortedByPriceAsc()
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.prix', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllSortedByPriceDesc()
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.prix', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findTop5CategoriesWithProducts()
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('c.id as category_id', 'c.nomCat as category_name', 'COUNT(p) AS product_count')
+            ->from('App\Entity\Produit', 'p')
+            ->join('p.nomCat', 'c')
+            ->groupBy('c.nomCat')
+            ->orderBy('product_count', 'DESC')
+            ->setMaxResults(5);
+
+        $query = $qb->getQuery();
+        $results = $query->getResult();
+
+        return $results;
+    }
+
+
+    public function findProduitsByCategorie($id)
+    {
+        $qb = $this->createQueryBuilder('p');
+        $qb->select('p')
+            ->join('p.nomCat', 'c')
+            ->where('c.id = :id')
+            ->setParameter('id', $id);
+
+        $query = $qb->getQuery();
+        $results = $query->getResult();
+
+        return $results;
+    }
