@@ -6,12 +6,13 @@ namespace App\Controller;
 
 // Other code follows
 
-use BaconQrCode\Renderer\Image\Png;
-use BaconQrCode\Writer;
 
-
-
-
+use App\Entity\FormationLike;
+use App\Repository\FormationLikeRepository;
+use App\Data\SearchData;
+use App\Form\SearchForm;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use App\Entity\Formation;
 use App\Form\FormationType;
 use App\Form\CategoryType;
@@ -32,6 +33,9 @@ use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use TCPDF;
 use Endroid\QrCode\QrCode;
+use Dompdf\Options;
+use Dompdf\Dompdf;
+
 class AdminController extends AbstractController
 {
     public function index()
@@ -46,32 +50,7 @@ class AdminController extends AbstractController
 
  
 
-    public function detail(Formation $formation, Request $request, EntityManagerInterface $entityManager)
-    {
-        $rating = new Rating();
-        $rating->setFormation($formation);
-    
-        $form = $this->createForm(RatingType::class, $rating);
-    
-        $form->handleRequest($request);
-    
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($rating);
-            $entityManager->flush();
-    
-            $this->addFlash('success', 'Rating added successfully.');
-        }
-    
-        $averageRating = $formation->getAverageRating();
-    
-        return $this->render('formation/detail.html.twig', [
-            'formation' => $formation,
-            'form' => $form->createView(),
-            'averageRating' => $averageRating,
-        ]);
-    }
-
-    
+   
 
     #[Route('/admin', name: 'admin')]
     public function home(FormationRepository $formationRepository): Response
@@ -235,52 +214,146 @@ $pdf->Write(5, '</table>');
     ));
 }
 
-
-#[Route('/rating/{id}', name: 'formationrating')]
-public function formationRating(FormationRepository $repo, EntityManagerInterface $em, int $id, Request $request): Response
+public function showFormation(Formation $formation)
 {
-    $formation = $repo->find($id);
+    return $this->render('admin/formationshow.html.twig', [
+        'formation' => $formation,
+    ]);
+}
 
-    if (!$formation) {
-        throw $this->createNotFoundException('The formation with id '.$id.' does not exist');
+
+
+public function formationAction($id)
+{
+    $formation = $this->getDoctrine()
+        ->getRepository(Formation::class)
+        ->find($id);
+
+    return $this->render('admin/formation.html.twig', [
+        'formation' => $formation,
+    ]);
+}
+
+
+
+
+//Exporter pdf (composer require dompdf/dompdf)
+    /**
+     * @Route("/pdf", name="PDF_Formation", methods={"GET"})
+     */
+    public function pdf(FormationRepository $FormationRepository)
+    {
+        // Configure Dompdf according to your needs
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+        // Retrieve the HTML generated in our twig file
+        $html = $this->renderView('admin/pdf.html.twig', [
+            'Formations' => $FormationRepository->findAll(),
+        ]);
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A3', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+        // Output the generated PDF to Browser (inline view)
+        $dompdf->stream("ListeDesFormation.pdf", [
+            "Formation" => true
+        ]);
+    }
+    /**
+     * @Route("/search", name="exsearch")
+     */
+    public function searchPlanajax(Request $request)
+    {
+        $repository = $this->getDoctrine()->getRepository(Formation::class);
+        $requestString = $request->get('searchValue');
+        $nom = $repository->findPlanBySujet($requestString);
+        return $this->render('admin/utilajax.html.twig', [
+            'formation' => $nom,
+        ]);
+    }
+    #[Route('/admin/sort', name: 'formation_sort')]
+    public function sort(FormationRepository $formationRepository, Request $request): Response
+    {
+        // Get the sort order from the request, default to "asc" if not set
+        $sortOrder = $request->query->get('sortOrder', 'asc');
+
+        // Get the formations sorted by name and price
+        $formations = $formationRepository->findBy([], [
+            'nom' => $sortOrder,
+            'prix' => $sortOrder,
+        ]);
+
+        return $this->render('admin/formation.html.twig', [
+            'formations' => $formations,
+            'sortOrder' => $sortOrder,
+        ]);
+        
+    }
+    #[Route('/new', name: 'app_formation_new', methods: ['GET', 'POST'])]
+public function new(Request $request, MailerInterface $mailer): Response
+{
+    $formation = new Formation();
+    $form = $this->createForm(FormationType::class, $formation);
+
+    if ($request->isMethod('POST')) {
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($formation);
+            $entityManager->flush();
+
+            $email = (new TemplatedEmail())
+                ->from($this->getParameter('app.email.from'))
+                ->to($this->getParameter('app.email.to'))
+                ->subject('Formation ajoutée')
+                ->htmlTemplate('admin/email.html.twig')
+                ->context([
+                    'formation' => $formation,
+                ]);
+
+            $mailer->send($email);
+
+            return $this->redirectToRoute('admin');
+        }
     }
 
-    // Handle the form submission
-    $form = $this->createFormBuilder()
-        ->add('rating', ChoiceType::class, [
-            'choices' => [
-                '1' => 1,
-                '2' => 2,
-                '3' => 3,
-                '4' => 4,
-                '5' => 5,
-            ],
-            'label' => 'Rate this formation',
-            'required' => true,
-        ])
-        ->add('submit', SubmitType::class, [
-            'label' => 'Submit',
-            'attr' => [
-                'class' => 'btn btn-primary',
-            ],
-        ])
-        ->getForm();
-
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-        $rating = $form->get('rating')->getData();
-        $formation->setRating($rating);
-        $em->flush();
-
-        return $this->redirectToRoute('formationshow', ['id' => $id]);
-    }
-
-    // Render the form
-    return $this->render('admin/formationrating.html.twig', [
+    return $this->render('admin/formationnew.html.twig', [
         'formation' => $formation,
         'form' => $form->createView(),
     ]);
 }
 
+
+/**
+     * @Route("/{id}/like", name="formation_like")
+     *
+     * @param Formation $formation
+     * @param EntityManagerInterface $manager
+     * @param FormationLikeRepository $likesRepo
+     */
+
+     public function like(Formation $formation, EntityManagerInterface $manager, FormationLikeRepository $likesRepo): Response
+     {
+         $like = new FormationLike();
+         $like->setFormation($formation);
+ 
+         $manager->persist($like);
+         $manager->flush();
+ 
+         $likesCount = $likesRepo->count(['formation' => $formation]);
+ 
+         return $this->json([
+             'code' => 200,
+             'message' => 'Like bien ajouté',
+             'likes' => $likesCount,
+         ]);
+     }
+    
 }
