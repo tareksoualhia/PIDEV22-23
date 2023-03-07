@@ -7,9 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CompetitionRepository::class)]
-class Competition
+class Competition implements \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -131,5 +132,25 @@ class Competition
         }
 
         return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return array(
+            'id' => $this->id,
+            'nom' => $this->nom,
+            'description' => $this->description,
+            'dateDebut' => $this->dateDebut->format("d-m-Y"),
+            'dateFin' => $this->dateFin->format("d-m-Y")
+
+        );
+    }
+
+    public function constructor($nom, $description, $dateDebut, $dateFin)
+    {
+        $this->nom = $nom;
+        $this->description = $description;
+        $this->dateDebut = $dateDebut;
+        $this->dateFin = $dateFin;
     }
 }

@@ -39,6 +39,19 @@ class CompetitionRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @return Competition[] Returns an array of Competition objects
+     */
+    public function findByNom($value): array
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.nom LIKE :val')
+            ->setParameter('val', '%'.$value.'%')
+            ->orderBy('c.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Competition[] Returns an array of Competition objects
 //     */

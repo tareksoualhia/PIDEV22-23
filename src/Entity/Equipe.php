@@ -5,10 +5,11 @@ namespace App\Entity;
 use App\Repository\EquipeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EquipeRepository::class)]
-class Equipe
+class Equipe implements \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -17,9 +18,14 @@ class Equipe
 
     #[ORM\Column(length: 255)]
 
+    #[Assert\NotBlank(message: "can't be blank")]
+
+
     private ?string $nom = null;
 
     #[ORM\Column(type: Types::TEXT)]
+
+    #[Assert\NotBlank(message: "can't be blank")]
 
     private ?string $description = null;
 
@@ -84,5 +90,26 @@ class Equipe
         $this->dateCreation = $dateCreation;
 
         return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return array(
+            'id' => $this->id,
+            'competition' => $this->competition,
+            'nom' => $this->nom,
+            'description' => $this->description,
+            'dateCreation' => $this->dateCreation->format("d-m-Y")
+
+        );
+    }
+
+    public function constructor($competition, $nom, $description, $dateCreation)
+    {
+        $this->competition = $competition;
+        $this->nom = $nom;
+        $this->description = $description;
+        $this->dateCreation = $dateCreation;
+
     }
 }

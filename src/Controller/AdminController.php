@@ -23,7 +23,7 @@ class AdminController extends AbstractController
     }
 
 
-    #[Route('/{id}', name: 'app_equipe_show', methods: ['GET'])]
+    #[Route('/show/{id}', name: 'app_equipe_show', methods: ['GET'])]
     public function show(Equipe $equipe): Response
     {
         return $this->render('admin/showequipe.html.twig', [
@@ -51,7 +51,7 @@ class AdminController extends AbstractController
     }
 
     
-    #[Route('/{id}', name: 'app_equipe_delete', methods: ['POST'])]
+    #[Route('/Delete/{id}', name: 'app_equipe_delete', methods: ['POST'])]
     public function delete(Request $request, Equipe $equipe, EquipeRepository $equipeRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$equipe->getId(), $request->request->get('_token'))) {
@@ -60,4 +60,20 @@ class AdminController extends AbstractController
 
         return $this->redirectToRoute('app_equipe_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    /**
+     * @Route("/searchEquipeajax", name="ajaxEquipe")
+     */
+    public function searchajax(Request $request ,EquipeRepository $PartRepository)
+    {
+        $requestString=$request->get('searchValue');
+        $equipe = $PartRepository->findEquipeAjax($requestString);
+
+
+        return $this->render('admin/ajax.html.twig', [
+            "equipes"=>$equipe,
+        ]);
+    }
+
+    
 }

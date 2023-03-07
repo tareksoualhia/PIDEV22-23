@@ -39,6 +39,26 @@ class EquipeRepository extends ServiceEntityRepository
         }
     }
 
+    public function findEquipeAjax($requestString)
+    {
+        $query = $this->createQueryBuilder('a')
+            ->Where('a.nom LIKE :key')
+            ->setParameter('key' , '%'.$requestString.'%')->getQuery();
+        return $query->getResult();
+    }
+
+    public function CountId()
+    {
+
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'SELECT competition_id , COUNT(competition_id) as res FROM `equipe` GROUP BY(competition_id) ';
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $sd;
+        return $resultSet->fetchAllAssociative();
+
+    }
+
 //    /**
 //     * @return Equipe[] Returns an array of Equipe objects
 //     */
