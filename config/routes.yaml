@@ -1,3 +1,6 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+stat_evaluations_index:
+  path: /competition/stat
+  controller: App\Controller\Admin1Controller::stat
