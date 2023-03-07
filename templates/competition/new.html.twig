@@ -36,14 +36,22 @@
 			<!-- Template Main CSS File -->
 			<link href="{{asset('assets/css/style.css')}}" rel="stylesheet">
 		{% endblock %}
-		<!-- =======================================================
-		  * Template Name: Gp - v4.10.0
-		  * Template URL: https://bootstrapmade.com/gp-free-multipurpose-html-bootstrap-template/
-		  * Author: BootstrapMade.com
-		  * License: https://bootstrapmade.com/license/
-		  ======================================================== -->
-	</head>
 
+
+		<!-- =======================================================
+										  * Template Name: Gp - v4.10.0
+										  * Template URL: https://bootstrapmade.com/gp-free-multipurpose-html-bootstrap-template/
+										  * Author: BootstrapMade.com
+										  * License: https://bootstrapmade.com/license/
+										  ======================================================== -->
+	</head>
+	<style>
+		.div-1 {
+			background-color: #EBEBEB;
+			width: 500px;
+			margin-left: calc(50% - 250px);
+		}
+	</style>
 	<body>
 
 		<!-- ======= Header ======= -->
@@ -127,7 +135,10 @@
 
 				<h1>Create new Competition</h1>
 
-				{{ include('competition/_form.html.twig') }}
+				<div class="div-1">
+					{{ include('competition/_form.html.twig') }}
+				</div>
+
 
 				<a href="{{ path('app_competition_index') }}">back to list</a>
 

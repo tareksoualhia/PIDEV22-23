@@ -1,0 +1,30 @@
+<table border="4" class="table table-bordered">
+    <thead>
+    <tr>
+        <th> id</th>
+        <th> nom </th>
+        <th> description </th>
+        <th> competition </th>
+        <th> dateCreation </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for equipe in equipes %}
+        <tr>
+            <td>{{ equipe.id }}</td>
+            <td>{{ equipe.nom }}</td>
+            <td>{{ equipe.description }}</td>
+            <td>{{ equipe.competition }}</td>
+            <td>{{ equipe.dateCreation ? equipe.dateCreation|date('Y-m-d') : ''}}</td>
+            <td>
+                <a href="{{ path('app_equipe_show', {'id': equipe.id}) }}">show</a>
+                <a href="{{ path('app_equipe_edit', {'id': equipe.id}) }}">edit</a>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="4">no records found</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

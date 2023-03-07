@@ -8,6 +8,9 @@
     <!-- plugins:css -->
     <link rel="stylesheet" href="{{asset('assets0/vendors/mdi/css/materialdesignicons.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets0/vendors/css/vendor.bundle.base.css')}}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.1.0/main.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.1.0/main.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.1.0/main.min.css">
     <!-- endinject -->
     <!-- Plugin css for this page -->
     <!-- End plugin css for this page -->
@@ -31,14 +34,13 @@
             <span class="mdi mdi-menu"></span>
           </button>
           <div class="search-field d-none d-md-block">
-            <form class="d-flex align-items-center h-100" action="#">
               <div class="input-group">
                 <div class="input-group-prepend bg-transparent">
                   <i class="input-group-text border-0 mdi mdi-magnify"></i>
                 </div>
-                <input type="text" class="form-control bg-transparent border-0" placeholder="Search projects" id="advanced">
+                <input type="text" class="form-control bg-transparent border-0" placeholder="Search projects">
+
               </div>
-            </form>
           </div>
           <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item nav-profile dropdown">
@@ -188,8 +190,8 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{path('app_equipe_index')}}">
-                <span class="menu-title">Equipe</span>
+              <a class="nav-link" href="{{path('app_competition_index')}}">
+                <span class="menu-title">Competition</span>
                 <i class="mdi mdi-home menu-icon"></i>
               </a>
             </li>
@@ -279,16 +281,9 @@
             </div>
             <div class="row">
               <div class="col-lg-6 grid-margin stretch-card">
-
-
-                <div id="all">
-                  {% include 'admin/ajax.html.twig' %}
-                </div>
-
-
-
-
-
+                {% block body %}
+                  <div id="calendar-holder"></div>
+                {% endblock %}
                   </div>
                 </div>
               </div>
@@ -315,44 +310,49 @@
     </div>
     <!-- container-scroller -->
     <!-- plugins:js -->
+
     <script src="{{asset('assets0/vendors/js/vendor.bundle.base.js')}}"></script>
     <!-- endinject -->
     <!-- Plugin js for this page -->
     <!-- End plugin js for this page -->
     <!-- inject:js -->
     <script src="{{asset('assets0/js/off-canvas.js')}}"></script>
-    <script
-            src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')}}">
-    </script>
-    <script>
-      $(document).ready(function() {
-        var currentRequest = null;
-        $("#advanced").keyup(function(e){
-          /* La variable value va prendre la valeur insérer dans le champ de texte
-          afin d’effectuer la recherche */
-          var value = $(this).val();
-          if(currentRequest != null) {
-            currentRequest.abort();
-          }
-          /* Ajax est lancé lors du remplissage du champ texte dont l’id est
-          « search » pour faire la recherche */
-          currentRequest = $.ajax({
-            url : "{{ path('ajaxEquipe') }}",
-            type : 'GET',
-            data: {
-              'searchValue' : value
-            },
-            success : function(retour)
-            {
-              $('#all').html(retour);
-            },
-          });
-          return false;
-        });
-      });
-    </script>
     <script src="{{asset('assets0/js/hoverable-collapse.js')}}"></script>
     <script src="{{asset('assets0/js/misc.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.1.0/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@4.1.0/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.1.0/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.1.0/main.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        var calendarEl = document.getElementById('calendar-holder');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          defaultView: 'dayGridMonth',
+          editable: true,
+          eventSources: [
+            {
+              url: "{{ path('load') }}",
+              method: "POST",
+              extraParams: {
+                filters: JSON.stringify({})
+              },
+              failure: () => {
+                // alert("There was an error while fetching FullCalendar!");
+              },
+            },
+          ],
+          header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay',
+          },
+          plugins: [ 'interaction', 'dayGrid', 'timeGrid' ], // https://fullcalendar.io/docs/plugin-index
+          timeZone: 'UTC',
+        });
+        calendar.render();
+      });
+    </script>
     <!-- endinject -->
     <!-- Custom js for this page -->
     <!-- End custom js for this page -->
