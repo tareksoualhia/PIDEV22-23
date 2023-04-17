@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="Firas-Equipe-Competition.jnlp">
+  <information>
+    <title>Firas-Equipe-Competition</title>
+    <vendor>houss</vendor>
+    <description>null</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="Firas-Equipe-Competition.jar" size="22293" download="eager" />
+    <jar href="lib\mysql-connector-java-8.0.23.jar" size="2415211" download="eager" />
+  </resources>
+  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="Firas-Equipe-Competition" >
+    <param name="requiredFXVersion" value="8.0+"/>
+  </applet-desc>
+  <jfx:javafx-desc  width="800" height="600" main-class="firas.equipe.competition.FirasEquipeCompetition"  name="Firas-Equipe-Competition" />
+  <update check="always"/>
+</jnlp>
