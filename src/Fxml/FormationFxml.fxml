@@ -20,7 +20,7 @@
                 <Label layoutX="10.0" layoutY="27.0" styleClass="labelform" stylesheets="@style.css" text="PHOTO: *" />
                 <Label layoutX="10.0" layoutY="44.0" styleClass="labelform" stylesheets="@style.css" text="PRIX: *" />
                  <Label layoutX="10.0" layoutY="10.0" styleClass="labelform" stylesheets="@style.css" text="CATEGORY: *" />
-
+ 
 
             </children>
         </VBox>
