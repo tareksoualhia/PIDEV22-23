@@ -26,7 +26,7 @@ public class MailSender {
         URL obj = new URL(POST_URL);
         HttpURLConnection httpURLConnection = (HttpURLConnection) obj.openConnection();
         httpURLConnection.setRequestMethod("POST");
-        httpURLConnection.setRequestProperty("User-Agent", USER_AGENT);
+        httpURLConnection.setRequestProperty("User-Agent", USER_AGENT); 
 
         // For POST only - START
         httpURLConnection.setDoOutput(true);
