@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
 package Fxml;
-
+ 
 import entities.CFormation;
 import entities.Category;
 import java.awt.event.MouseEvent;
