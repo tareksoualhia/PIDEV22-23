@@ -122,7 +122,7 @@ Reclamation rv=new Reclamation();
              System.out.println("ok");}
              catch (Exception ex) {
             System.out.println(ex.getMessage());
-        }
+        
             System.out.println("Modification terminé");}
               
              
@@ -131,13 +131,13 @@ Reclamation rv=new Reclamation();
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Modification terminée avec succès.");
         alert.setHeaderText(null);
-    alert.setContentText("Your review  has been modified.");
+    alert.setContentText("Your reclamation  has been modified.");
         alert.showAndWait();
         javafx.scene.Parent tableview = FXMLLoader.load(getClass().getResource("DashbordReclamation.fxml"));
         Scene sceneview = new Scene(tableview);
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
         window.setScene(sceneview);
-        window.show();
+        window.show();}
       
     }
     }
