@@ -9,8 +9,14 @@ import Entites.Competition;
 import Entites.Equipe;
 import Services.CompetitionService;
 import Services.EquipeService;
+import Services.SendSms;
 import java.net.URL;
 import java.sql.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -35,6 +41,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import jfxtras.scene.control.agenda.Agenda;
 
 /**
  * FXML Controller class
@@ -129,6 +136,12 @@ public class BackController implements Initializable {
     private Button btnFilter;
     @FXML
     private Button btnReset;
+    @FXML
+    private Button btnMenuAgenda;
+    @FXML
+    private Pane pnAgenda;
+    @FXML
+    private Agenda PlanningAgenda;
 
     /**
      * Initializes the controller class.
@@ -446,6 +459,7 @@ public class BackController implements Initializable {
             c.setCompetition_id(cs.getCompByName(tfCompEq.getValue()).getId());
             c.setDate_creation(Date.valueOf(tfDateEq.getValue()));
                cs.add(c); 
+                SendSms.send("+21628599271","Equpe ajouté avec succées" );
                tfNomEq.setText("");
             tfDescComp.setText("");
             tfCompEq.setValue(null);
@@ -508,8 +522,6 @@ public class BackController implements Initializable {
         }
     }
 
-    
-    
     @FXML
     private void fnFilter(ActionEvent event) {
         CompetitionService cs=new CompetitionService();
@@ -552,8 +564,6 @@ public class BackController implements Initializable {
         }
     }
 
-    
-    
     @FXML
     private void fnReset(ActionEvent event) {
         tfDebutFilter.setValue(null);
@@ -561,6 +571,32 @@ public class BackController implements Initializable {
         tfDebutFilter.setPromptText("Debut");
         tfFinFilter.setPromptText("Fin");
         fnCompShow();
+    }
+
+    @FXML
+    private void fnMenuAgenda(ActionEvent event) {
+        pnAgenda.toFront();
+        CompetitionService sr=new CompetitionService();
+                    PlanningAgenda.appointments().clear();
+
+        List<Competition> plan = sr.Show();
+
+        for(int i=0; i<plan.size();i++) {
+            LocalDateTime localDateTime = plan.get(i).getDate_debut().toLocalDate().atTime(8, 00);
+            ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
+            Calendar calendarDebut = Calendar.getInstance();
+            calendarDebut.setTimeInMillis(zonedDateTime.toInstant().toEpochMilli());
+
+            Calendar calendarFin = Calendar.getInstance();
+            PlanningAgenda.appointments() ;
+            calendarFin.setTimeInMillis(zonedDateTime.toInstant().toEpochMilli());
+            Agenda.AppointmentImplLocal app=new Agenda.AppointmentImplLocal();
+            app.setStartLocalDateTime(plan.get(i).getDate_debut().toLocalDate().atTime(8, 00));
+            app.setEndLocalDateTime(plan.get(i).getDate_fin().toLocalDate().atTime(17, 00));
+            app.setDescription(plan.get(i).getNom());
+            PlanningAgenda.appointments().add(app);
+           
+        }
     }
     
 }

@@ -13,11 +13,17 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import jfxtras.scene.control.agenda.Agenda?>
 
 <AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BackController">
    <children>
       <VBox alignment="CENTER" prefHeight="601.0" prefWidth="182.0" spacing="30.0" style="-fx-background-color: bcac9b;">
          <children>
+            <Button fx:id="btnMenuAgenda" layoutX="34.0" layoutY="257.0" mnemonicParsing="false" onAction="#fnMenuAgenda" prefHeight="39.0" prefWidth="135.0" style="-fx-background-color: #ffffff;" text="Calendrier" textFill="#bcac9b">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Button>
             <Button fx:id="btnMenuCompetition" mnemonicParsing="false" onAction="#fnMenuCompetition" prefHeight="39.0" prefWidth="135.0" style="-fx-background-color: #ffffff;" text="Comptetion" textFill="#bcac9b">
                <font>
                   <Font name="System Bold" size="18.0" />
@@ -103,12 +109,12 @@
                                     <Font size="29.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="10.0" layoutY="74.0" prefHeight="64.0" prefWidth="229.0" text="Debut">
+                              <Label layoutX="10.0" layoutY="74.0" prefHeight="64.0" prefWidth="229.0" text="Competition">
                                  <font>
                                     <Font size="29.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="10.0" layoutY="138.0" prefHeight="64.0" prefWidth="229.0" text="Fin">
+                              <Label layoutX="10.0" layoutY="138.0" prefHeight="64.0" prefWidth="229.0" text="Date">
                                  <font>
                                     <Font size="29.0" />
                                  </font>
@@ -219,6 +225,16 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Button>
+               </children>
+            </Pane>
+            <Pane fx:id="pnAgenda" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #ffffff;">
+               <children>
+                  <Label layoutX="59.0" layoutY="23.0" prefHeight="48.0" prefWidth="296.0" text="Calendrier" textFill="#bcac9b">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Label>
+                  <Agenda fx:id="PlanningAgenda" layoutX="90.0" layoutY="145.0" prefHeight="336.0" prefWidth="458.0" />
                </children>
             </Pane>
          </children>
