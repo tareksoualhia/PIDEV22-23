@@ -5,6 +5,7 @@
  */
 package gui;
 
+import entite.User;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -21,6 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import service.UserCRUD;
 
 /**
@@ -47,24 +49,31 @@ public class LoginController implements Initializable {
         // TODO
     }    
 
-    @FXML
-    private void Login(ActionEvent event) throws SQLException {
-        
-               String mail = emailuser.getText();
-        String password = passworduser.getText();
-        if ((!mail.isEmpty()) & (!password.isEmpty())) {
-     
-            UserCRUD u = new UserCRUD();
+@FXML
+private void Login(ActionEvent event) throws SQLException {
+    String mail = emailuser.getText();
+    String password = passworduser.getText();
+    if ((!mail.isEmpty()) && (!password.isEmpty())) {
 
+        UserCRUD u = new UserCRUD();
+        Pair<Integer, String> loginResult = u.loginUser(mail, password);
 
-        if (u.loginUser(mail, password)) {
-             
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Succes ");
-                alert.setHeaderText("Login succes!");
-                alert.showAndWait();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("GererUser.fxml"));
-
+        if (loginResult.getKey() == -2) {
+            // User is blocked
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Your account is blocked!");
+            alert.showAndWait();
+        } else if (loginResult.getKey() != -1) {
+            // User is not blocked and logged in successfully
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText("Login successful!");
+            alert.showAndWait();
+            String role = loginResult.getValue();
+            if (role.equals("UserFace.fxml")) {
+                // Load the user screen
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(role));
                 Parent root;
                 Stage stage;
                 try {
@@ -73,31 +82,57 @@ public class LoginController implements Initializable {
                     Scene scene = new Scene(root);
                     stage.setScene(scene);
                     stage.show();
+                      UserFaceController controller = loader.getController();
+                        controller.setEmail(mail);
+                } catch (IOException ex) {
+                    System.err.println(ex.getMessage());
                 }
-                catch (IOException ex) {
+            } else if (role.equals("GererUser.fxml")) {
+                // Load the admin screen
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(role));
+                Parent root;
+                Stage stage;
+                try {
+                    root = loader.load();
+                    stage = (Stage) idlogin.getScene().getWindow();
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
+                } catch (IOException ex) {
                     System.err.println(ex.getMessage());
                 }
             }
-     
-      
-            else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error ");
-                alert.setHeaderText("Login failed!");
-                alert.showAndWait();
-            }
-        }
-        else {
+        } else {
+            // Login failed
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error ");
-            alert.setHeaderText("Fill your the form to continue !");
+            alert.setTitle("Error");
+            alert.setHeaderText("Login failed!");
             alert.showAndWait();
         }
-    }
+    } else {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle("Error");
+    alert.setHeaderText("Fill in the form to continue!");
+    alert.showAndWait();
+}
+}
+
+
+
 
     @FXML
     private void registerUser(ActionEvent event) throws IOException {
                  FXMLLoader loader = new FXMLLoader(getClass().getResource("RegisterUser.fxml"));
+       Parent root = loader.load();
+       Scene scene = new Scene(root);
+       Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+       stage.setScene(scene);
+       stage.show();
+    }
+
+    @FXML
+    private void ForgetPass(ActionEvent event) throws IOException {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("ForgetPassword.fxml"));
        Parent root = loader.load();
        Scene scene = new Scene(root);
        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

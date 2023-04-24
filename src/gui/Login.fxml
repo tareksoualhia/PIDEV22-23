@@ -4,21 +4,20 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoginController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="647.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoginController">
    <children>
-      <Button fx:id="idlogin" layoutX="255.0" layoutY="234.0" mnemonicParsing="false" onAction="#Login" prefHeight="40.0" prefWidth="100.0" text="Login" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px;" />
-      <TextField fx:id="emailuser" layoutX="200.0" layoutY="80.0" prefHeight="40.0" prefWidth="250.0" promptText="Email" style="-fx-border-color: #4CAF50; -fx-border-radius: 10px; -fx-padding: 5px;" />
-      <PasswordField fx:id="passworduser" layoutX="200.0" layoutY="150.0" prefHeight="40.0" prefWidth="250.0" promptText="Password" style="-fx-border-color: #4CAF50; -fx-border-radius: 10px; -fx-padding: 5px;" />
-      <Label layoutX="180.0" layoutY="300.0" prefHeight="40.0" prefWidth="240.0" text="Don't have an account?" textFill="#4CAF50" />
-      <Button layoutX="450.0" layoutY="330.0" mnemonicParsing="false" onAction="#registerUser" prefHeight="40.0" prefWidth="100.0" text="Sign Up" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px;" />
-      <Label layoutX="100.0" layoutY="25.0" prefHeight="50.0" prefWidth="400.0" style="-fx-text-fill: #4CAF50; -fx-font-size: 24px; -fx-effect: innershadow(gaussian, #4CAF50, 5, 1, 0, 0);">
+      <Button fx:id="idlogin" layoutX="255.0" layoutY="234.0" mnemonicParsing="false" onAction="#Login" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px;" text="Login" />
+      <TextField fx:id="emailuser" layoutX="175.0" layoutY="79.0" prefHeight="40.0" prefWidth="250.0" promptText="Email" style="-fx-border-color: #4CAF50; -fx-border-radius: 10px; -fx-padding: 5px;" />
+      <PasswordField fx:id="passworduser" layoutX="175.0" layoutY="149.0" prefHeight="40.0" prefWidth="250.0" promptText="Password" style="-fx-border-color: #4CAF50; -fx-border-radius: 10px; -fx-padding: 5px;" />
+      <Label layoutX="175.0" layoutY="330.0" prefHeight="40.0" prefWidth="169.0" text="Don't have an account?" textFill="#4CAF50" />
+      <Button layoutX="344.0" layoutY="330.0" mnemonicParsing="false" onAction="#registerUser" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px;" text="Sign Up" />
+      <Label layoutX="250.0" layoutY="21.0" prefHeight="50.0" prefWidth="100.0" style="-fx-text-fill: #4CAF50; -fx-font-size: 24px; -fx-effect: innershadow(gaussian, #4CAF50, 5, 1, 0, 0);">
          <text>
             Sign In
          </text>
       </Label>
+      <Button layoutX="466.0" layoutY="330.0" mnemonicParsing="false" onAction="#ForgetPass" prefHeight="40.0" prefWidth="162.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px;" text="Forget Password" />
    </children>
 </AnchorPane>
-

@@ -20,6 +20,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import service.UserCRUD;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  * FXML Controller class
@@ -65,8 +66,11 @@ private void RegisterU(ActionEvent event) throws IOException {
     }
 
     if (errorMessage.isEmpty()) {
+        // Hash the password
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+
         // Attempt to register the user
-        boolean userCreated = u.registerUser(email, nom, password);
+        boolean userCreated = u.registerUser(email, nom, hashedPassword);
 
         if (userCreated) {
             // Registration successful, show a success message

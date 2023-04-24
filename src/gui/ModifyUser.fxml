@@ -5,16 +5,13 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="566.0" prefWidth="744.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="gui.ModifyUserController">
-       <children>
-      <Button layoutX="192.0" layoutY="46.0" mnemonicParsing="false" onAction="#getUser" prefHeight="31.0" prefWidth="62.0" text="Find" />
-      <Label layoutX="37.0" layoutY="51.0" prefHeight="21.0" prefWidth="28.0" text="id :" />
-      <Label layoutX="223.0" layoutY="208.0" prefHeight="21.0" prefWidth="54.0" text="email" />
-      <Label layoutX="223.0" layoutY="292.0" prefHeight="21.0" prefWidth="54.0" text="nom" />
-      <TextField fx:id="idE" layoutX="94.0" layoutY="46.0" prefHeight="31.0" prefWidth="41.0" />
-      <TextField fx:id="emailUser" layoutX="321.0" layoutY="203.0" prefHeight="31.0" prefWidth="133.0" />
-      <TextField fx:id="NomUser" layoutX="326.0" layoutY="287.0" prefHeight="31.0" prefWidth="123.0" />
-      <Button layoutX="388.0" layoutY="403.0" mnemonicParsing="false" onAction="#deleteUser" text="Delete" />
-      <Button layoutX="257.0" layoutY="403.0" mnemonicParsing="false" onAction="#updateUser" text="Update" />
-   </children>
+<AnchorPane id="AnchorPane" prefHeight="566.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ModifyUserController">
+    <children>
+        <Label layoutX="107.0" layoutY="193.0" prefHeight="21.0" prefWidth="54.0" style="-fx-font-weight: bold;" text="Email" />
+        <Label layoutX="107.0" layoutY="292.0" prefHeight="21.0" prefWidth="54.0" style="-fx-font-weight: bold;" text="Nom" />
+        <TextField fx:id="emailUser" layoutX="193.0" layoutY="188.0" prefHeight="31.0" prefWidth="300.0" style="-fx-background-color: #f1f1f1;" />
+        <TextField fx:id="NomUser" layoutX="193.0" layoutY="277.0" prefHeight="31.0" prefWidth="300.0" style="-fx-background-color: #f1f1f1;" />
+        <Button layoutX="193.0" layoutY="340.0" mnemonicParsing="false" onAction="#updateUser" style="-fx-background-color: #007bff; -fx-text-fill: #ffffff;" text="Update" />
+        <Button layoutX="298.0" layoutY="340.0" mnemonicParsing="false" onAction="#deleteUser" style="-fx-background-color: #dc3545; -fx-text-fill: #ffffff;" text="Delete" />
+    </children>
 </AnchorPane>

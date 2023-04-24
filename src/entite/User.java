@@ -15,8 +15,21 @@ public class User {
     private String nom;
     private String roles;
     private String password;
+   private String reset_password;
+   private boolean blocked ;
+   private byte[] picture;
 
     public User() {
+    }
+    
+      // Constructor to set default values for roles and blocked
+    public User(String email, String nom, String password) {
+        this.email = email;
+        this.nom = nom;
+        this.roles = "USER ROLE";
+        this.password = password;
+        this.reset_password = null;
+        this.blocked = false;
     }
 
     public User(int id, String email, String nom, String roles, String password) {
@@ -39,17 +52,104 @@ public class User {
         this.password = password;
     }
 
-    public User(String email, String nom, String password) {
-        this.email = email;
-        this.nom = nom;
-        this.password = password;
-    }
-
     public User(int id, String email, String nom) {
         this.id = id;
         this.email = email;
         this.nom = nom;
     }
+
+    public User(int id, String email, String nom, String roles, String password, String reset_password, boolean blocked, byte[] picture) {
+        this.id = id;
+        this.email = email;
+        this.nom = nom;
+        this.roles = roles;
+        this.password = password;
+        this.reset_password = reset_password;
+        this.blocked = blocked;
+        this.picture = picture;
+    }
+
+    public User(String email, String nom, String roles, String password, String reset_password, boolean blocked, byte[] picture) {
+        this.email = email;
+        this.nom = nom;
+        this.roles = roles;
+        this.password = password;
+        this.reset_password = reset_password;
+        this.blocked = blocked;
+        this.picture = picture;
+    }
+
+    public User(int id, byte[] picture) {
+        this.id = id;
+        this.picture = picture;
+    }
+
+    public User(byte[] picture) {
+        this.picture = picture;
+    }
+    
+
+    public User(int id, String email, String nom, String roles, String password, String reset_password) {
+        this.id = id;
+        this.email = email;
+        this.nom = nom;
+        this.roles = roles;
+        this.password = password;
+        this.reset_password = reset_password;
+    }
+
+    public User(String email, String nom, String roles, String password, String reset_password) {
+        this.email = email;
+        this.nom = nom;
+        this.roles = roles;
+        this.password = password;
+        this.reset_password = reset_password;
+    }
+
+    public User(String reset_password) {
+        this.reset_password = reset_password;
+    }
+
+    public User(int id, String email, String nom, byte[] picture) {
+        this.id = id;
+        this.email = email;
+        this.nom = nom;
+        this.picture = picture;
+    }
+
+
+   
+    public byte[] getPicture() {
+        return picture;
+    }
+
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
+    }
+    
+    
+
+    public String getReset_password() {
+        return reset_password;
+    }
+
+    public void setReset_password(String reset_password) {
+        this.reset_password = reset_password;
+    }
+
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
+    }
+    
+    
+      public int getBlocked() {
+        return blocked ? 1 : 0;
+    }
+    
     
 
     public int getId() {
@@ -91,6 +191,8 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+    
+
 
     @Override
     public String toString() {
